@@ -8,7 +8,7 @@ exclude: true
 
 DLVM is a compiler infrastructure for modern deep learning software.
 
-DLVM combines linear algebra operations, automatic differentiation, domain-specific optimizations and a code generator targeting heterogeneous parallel hardware. DLVM is designed to support the development of neural networks DSLs, with both AOT And JIT compilation.
+DLVM combines linear algebra operations, automatic differentiation, domain-specific optimizations, and a code generator targeting heterogeneous parallel hardware. DLVM is designed to support the development of neural networks DSLs, with both AOT And JIT compilation.
 
 # Projects
 
