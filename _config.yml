@@ -4,8 +4,8 @@ email: team@dlvm.org
 description: >
   Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for 
   modern deep learning software.
-baseurl: ""
-url: "dlvm.org"
+baseurl: ''
+url: 'dlvm.org'
 permalink: /blog/:title/
 
 # Social media
