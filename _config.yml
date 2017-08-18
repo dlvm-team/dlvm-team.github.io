@@ -17,10 +17,6 @@ plugins:
   - jekyll-feed
   - jekyll-compose
 
-# Include in processing
-include:
-  - _assets
-
 # Exclude from processing
 exclude:
   - Gemfile
