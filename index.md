@@ -15,6 +15,6 @@ DLVM combines linear algebra operations, automatic differentiation, domain-speci
 - [DLVM](#):
      core compiler infrastructure
 - [NNKit](#):
-     tagless-final DSL embedded in Swift that targets DLVM IR
+     tagless-final DSL for building neural networks, embedded in Swift
 - [CoreTensor](https://github.com/dlvm-team/CoreTensor):
      tensor data structures and operations
