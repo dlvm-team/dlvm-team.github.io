@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "Welcome"
+date:   2017-08-17 20:09:49 -0400
+categories: welcome
+---
+Deep learning software demands performance and reliability. However, many of the current deep learning tools and infrastructures are highly dependent on software libraries that act as a dynamic DSL and a computation graph interpreter.
+
+We present DLVM, a design and implementation of a compiler framework that consists of linear algebra operations, automatic differentiation, domain-specific optimizations and a code generator targeting heterogeneous parallel hardware. DLVM is designed to support the development of neural network DSLs, with both AOT and JIT compilation.
+
+To demonstrate an end-to-end system from network network DSL (via DLVM) to parallelized execution, we demonstrate, NNKit, a typed tagless-final DSL embedded in the Swift programming language that targets DLVM IR.
+
+We argue that the DLVM system enables a form of modular, safe, and performant toolkits for deep learning.

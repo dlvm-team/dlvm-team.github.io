@@ -1,0 +1,28 @@
+<footer class="site-footer">
+
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-3">
+        <ul class="contact-list">
+          {% if site.email %}
+          <li>Contact us</li>
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <ul class="contact-list">
+          {% if site.github_username %}
+          <li>GitHub</li>
+          <li>
+            {% include icon-github.html username=site.github_username %}
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    
+    <h4>Copyright © 2017 DLVM.</h4>
+  </div>
+</footer>
