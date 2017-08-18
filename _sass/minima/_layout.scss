@@ -8,6 +8,12 @@
 
   // Positioning context for the mobile navigation icon
   position: relative;
+
+  img {
+    height: $spacing-unit * 1.6 - 8px;
+    margin: 8px 8px;
+    float: left;
+  }
 }
 
 .site-title {

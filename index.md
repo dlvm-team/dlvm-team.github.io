@@ -26,16 +26,17 @@ All projects are written in [Swift](https://swift.org/about).
 
 - [CoreTensor](https://github.com/dlvm-team/CoreTensor)
   - A library for tensor shaping, storage, indexing, slicing, linear algebra
-    shape transformation and collection behavior
+    shape transformation, and collection behavior
   - *Open-sourcing in progress*
 
 - [DLVM Core](https://github.com/dlvm-team/DLVM)
   - The core compiler infrastructure: IR, analyses, automatic differentiator,
-    optimization passes & back-end code generator
+    optimization passes, and back-end code generator
   - *Open-sourcing in progress*
 
 - [NNKit](https://github.com/dlvm-team/NNKit)
-  - A "tagless-final" neural network DSL embedded in Swift, representing a form of deep learning toolkits with a focus on safety and developer experience
+  - A "tagless-final" neural network DSL embedded in Swift, representing a form
+    of deep learning toolkits with a focus on safety and developer experience
 
 - The Tensor Expression Language (TEL)
   - A standalone DSL for declaratively building neural network computation
