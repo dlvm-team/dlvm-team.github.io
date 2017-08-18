@@ -1,9 +1,8 @@
 # Site settings
 title: DLVM
-email: team@dlvm.org 
+email: team@dlvm.org
 description: >
-  Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for 
-  modern deep learning software.
+  Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.
 baseurl: ''
 url: 'dlvm.org'
 permalink: /blog/:title/
@@ -16,6 +15,7 @@ markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-compose
 
 # Exclude from processing
 exclude:
