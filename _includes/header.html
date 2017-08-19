@@ -3,7 +3,7 @@
     {%- assign default_paths = site.pages | map: "path" -%}
     {%- assign page_paths = site.header_pages | default: default_paths -%}
     <a href="{{ "/" | relative_url }}">
-      <img src="{{ site.base_url }}/assets/img/dlvm-logo.png" alt="DLVM Logo">
+      <img src="{{ "/assets/img/dlvm-logo.png" | prepend: site.base_url }}" alt="DLVM Logo">
       <span class="site-title">{{ site.title | escape }}</span>
     </a>
     {%- if page_paths -%}
