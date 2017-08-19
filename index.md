@@ -17,8 +17,9 @@ DLVM is designed to support the development of neural network DSLs, with both
 AOT and JIT compilation.
 
 **DLVM** started as a research project at University of Illinois at
-Urbana-Champaign, and is now driven by a small community of researchers and
-developers. Most projects will be open-source later this year.
+Urbana-Champaign, and is now driven by a
+small [community](http://dlvm.org/people) of researchers and developers. Most
+projects will be open-source later this year.
 
 # Projects
 
@@ -27,7 +28,6 @@ All projects are written in [Swift](https://swift.org/about).
 - [CoreTensor](https://github.com/dlvm-team/CoreTensor)
   - A library for tensor shaping, storage, indexing, slicing, linear algebra
     shape transformation, and collection behavior
-  - *Open-sourcing in progress*
 
 - [DLVM Core](https://github.com/dlvm-team/DLVM)
   - The core compiler infrastructure: IR, analyses, automatic differentiator,
@@ -37,6 +37,7 @@ All projects are written in [Swift](https://swift.org/about).
 - [NNKit](https://github.com/dlvm-team/NNKit)
   - A "tagless-final" neural network DSL embedded in Swift, representing a form
     of deep learning toolkits with a focus on safety and developer experience
+  - *Open-sourcing in progress*
 
 - The Tensor Expression Language (TEL)
   - A standalone DSL for declaratively building neural network computation
