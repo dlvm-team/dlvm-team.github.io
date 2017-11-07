@@ -25,7 +25,7 @@ system enables a form of modular, safe and performant toolkits for deep learning
 
 DLVM started as a research project at University of Illinois at
 Urbana-Champaign, and is now driven by a
-small [community](http://dlvm.org/people) of researchers and developers. Most
+[small community](http://dlvm.org/people) of researchers and developers. Most
 projects will be open-source later this year.
 
 # Projects

@@ -16,7 +16,7 @@ DLVM is an active research project run by brilliant people.
 
 - [Dan Zheng](http://danzheng.me), Purdue University
   - Maintainer of [dlvm.org](http://dlvm.org)
-  - Major contributor to **CoreTensor** and **NNKit**
+  - Major contributor to *CoreTensor* and *NNKit*
   
 - [Will Dietz](http://wdtz.org), University of Illinois at Urbana-Champaign
   - [ALLVM](http://allvm.org) build support
