@@ -6,17 +6,24 @@ exclude: true
 
 # Introduction
 
-The umbrella project **DLVM** introduces an end-to-end system from safe neural
-network DSLs to heterogeneous parallel code generation, demonstrating a new
-infrastructure for modern deep learning software.
+Deep learning software demands reliability and performance.
+However, many of the existing deep learning frameworks are software libraries
+that act as an unsafe DSL in Python and a computation graph interpreter.
 
-DLVM Core is a design and implementation of a compiler infrastructure that
-consists of linear algebra operators, automatic differentiation, domain-specific
-optimizations and a code generator targeting heterogeneous parallel hardware.
-DLVM is designed to support the development of neural network DSLs, with both
-AOT and JIT compilation.
+We present DLVM, a design and implementation of a compiler infrastructure
+with a linear algebra intermediate representation, algorithmic differentiation
+by adjoint code generation, domain-specific optimizations and a code generator
+targeting GPU via LLVM.
 
-**DLVM** started as a research project at University of Illinois at
+Designed as a modern compiler IR inspired by LLVM and SIL, DLVM IR is more modular
+and more generic than existing deep learning compiler IRs, and supports deep learning
+DSLs with high expressivity.
+With our prototypical deep learning DSLs embedded in Swift, we argue that the DLVM
+system enables a form of modular, safe and performant toolkits for deep learning.
+
+---
+
+DLVM started as a research project at University of Illinois at
 Urbana-Champaign, and is now driven by a
 small [community](http://dlvm.org/people) of researchers and developers. Most
 projects will be open-source later this year.
