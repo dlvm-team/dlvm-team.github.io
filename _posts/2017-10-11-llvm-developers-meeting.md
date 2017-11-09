@@ -10,5 +10,4 @@ DLVM is participating in the student research competition at the 2017 US LLVM De
 _Update:_ DLVM won first prize in the student research competition:
 congratulations to [Richard Wei](http://rxwei.me/about/){:target="_blank"}!
 
-<!-- The slides/video are now available on [Youtube](https://www.youtube.com/watch?v=9fdFbVBUQGs){:target="_blank"}. -->
-The slides/video will be posted when they are made available.
+The slides/video are now available on [Youtube](https://www.youtube.com/watch?v=9fdFbVBUQGs){:target="_blank"}.
