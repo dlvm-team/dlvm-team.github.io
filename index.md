@@ -28,6 +28,15 @@ Urbana-Champaign, and is now driven by a
 [small community](http://dlvm.org/people) of researchers and developers. Most
 projects will be open-source later this year.
 
+# Publications
+
+- "A modern compiler framework for neural network DSLs"
+  - Richard Wei, Vikram Adve, and Lane Schwartz
+  - Accepted to [ML Systems Workshop at NIPS 2017](http://learningsys.org/nips17/)
+- ["DLVM: A Modern Compiler Infrastructure for Deep Learning Systems"](https://arxiv.org/pdf/1711.03016)
+  - Richard Wei, Vikram Adve, and Lane Schwartz
+  - Pre-print
+
 # Projects
 
 All projects are written in [Swift](https://swift.org/about).
