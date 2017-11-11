@@ -33,7 +33,10 @@ projects will be open-source later this year.
 - "A modern compiler framework for neural network DSLs"
   - Richard Wei, Vikram Adve, and Lane Schwartz
   - Accepted to [ML Systems Workshop at NIPS 2017](http://learningsys.org/nips17/)
-- ["DLVM: A Modern Compiler Infrastructure for Deep Learning Systems"](https://arxiv.org/pdf/1711.03016)
+- "A modern compiler infrastructure for deep learning systems with adjoint code generation in a domain-specific IR"
+  - Richard Wei, Vikram Adve, and Lane Schwartz
+  - Accepted to [Autodiff Workshop at NIPS 2017](https://autodiff-workshop.github.io/)
+- ["DLVM: A modern compiler infrastructure for deep learning systems"](https://arxiv.org/pdf/1711.03016)
   - Richard Wei, Vikram Adve, and Lane Schwartz
   - Pre-print
 
