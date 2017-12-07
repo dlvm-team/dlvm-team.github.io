@@ -1,6 +1,6 @@
 ---
 layout: default
-title: DLVM
+title: The DLVM Compiler Infrastructure for Deep Learning Systems
 exclude: true
 ---
 
