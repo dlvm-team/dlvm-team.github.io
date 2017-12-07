@@ -4,7 +4,9 @@ title: DLVM
 exclude: true
 ---
 
-# Introduction
+# DLVM: Modern Compiler Infrastructure for Deep Learning Systems
+
+## Introduction
 
 Deep learning software demands reliability and performance.
 However, many of the existing deep learning frameworks are software libraries
@@ -27,7 +29,7 @@ DLVM started as a research project at University of Illinois at
 Urbana-Champaign, and is now driven by a [small community](http://dlvm.org/people)
 of researchers and developers.
 
-# Publications
+## Publications
 
 - "A modern compiler framework for neural network DSLs"
   - Richard Wei, Lane Schwartz and Vikram Adve
@@ -39,7 +41,7 @@ of researchers and developers.
   - Richard Wei, Lane Schwartz and Vikram Adve
   - Pre-print
 
-# Projects
+## Projects
 
 All projects are written in [Swift](https://swift.org/about).
 
