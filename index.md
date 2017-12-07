@@ -24,20 +24,19 @@ system enables a form of modular, safe and performant toolkits for deep learning
 ---
 
 DLVM started as a research project at University of Illinois at
-Urbana-Champaign, and is now driven by a
-[small community](http://dlvm.org/people) of researchers and developers. Most
-projects will be open-source later this year.
+Urbana-Champaign, and is now driven by a [small community](http://dlvm.org/people)
+of researchers and developers.
 
 # Publications
 
 - "A modern compiler framework for neural network DSLs"
-  - Richard Wei, Vikram Adve, and Lane Schwartz
+  - Richard Wei, Lane Schwartz and Vikram Adve
   - Accepted to [ML Systems Workshop at NIPS 2017](http://learningsys.org/nips17/)
 - "A modern compiler infrastructure for deep learning systems with adjoint code generation in a domain-specific IR"
-  - Richard Wei, Vikram Adve, and Lane Schwartz
+  - Richard Wei, Lane Schwartz and Vikram Adve
   - Accepted to [Autodiff Workshop at NIPS 2017](https://autodiff-workshop.github.io/)
 - ["DLVM: A modern compiler infrastructure for deep learning systems"](https://arxiv.org/abs/1711.03016)
-  - Richard Wei, Vikram Adve, and Lane Schwartz
+  - Richard Wei, Lane Schwartz and Vikram Adve
   - Pre-print
 
 # Projects
