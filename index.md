@@ -44,10 +44,6 @@ projects will be open-source later this year.
 
 All projects are written in [Swift](https://swift.org/about).
 
-- [CoreTensor](https://github.com/dlvm-team/CoreTensor)
-  - A tensor library providing shaping, storage, indexing, slicing, linear algebra
-    shape transformation, broadcasting, and collection behavior
-
 - [DLVM Core](https://github.com/dlvm-team/DLVM)
   - The core compiler infrastructure: IR, analyses, automatic differentiator,
     optimization passes, and back-end code generator
