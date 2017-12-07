@@ -36,7 +36,7 @@ projects will be open-source later this year.
 - "A modern compiler infrastructure for deep learning systems with adjoint code generation in a domain-specific IR"
   - Richard Wei, Vikram Adve, and Lane Schwartz
   - Accepted to [Autodiff Workshop at NIPS 2017](https://autodiff-workshop.github.io/)
-- ["DLVM: A modern compiler infrastructure for deep learning systems"](./assets/paper.pdf)
+- ["DLVM: A modern compiler infrastructure for deep learning systems"](https://arxiv.org/abs/1711.03016)
   - Richard Wei, Vikram Adve, and Lane Schwartz
   - Pre-print
 
