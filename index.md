@@ -19,11 +19,11 @@ with a linear algebra intermediate representation, algorithmic differentiation
 by adjoint code generation, domain-specific optimizations, and a code generator
 targeting GPU via LLVM.
 
-Designed as a modern compiler IR inspired by LLVM and SIL, DLVM IR is more modular
-and more generic than existing deep learning compiler IRs, and supports deep learning
-DSLs with high expressivity.
-With our prototypical deep learning DSLs embedded in Swift, we argue that the DLVM
-system enables a form of modular, safe and performant toolkits for deep learning.
+Designed as a modern compiler infrastructure inspired by LLVM, DLVM is more modular
+and more generic than existing deep learning compiler frameworks, and supports
+tensor DSLs with high expressivity. With our prototypical staged DSL embedded in Swift,
+we argue that the DLVM system enables a form of modular, safe, and performant frameworks
+for deep learning.
 
 ---
 
@@ -60,4 +60,3 @@ All projects are written in [Swift](https://swift.org/about).
 - The Tensor Expression Language (TEL)
   - A standalone DSL for declaratively building neural network computation
     graphs, with a compiler that emits DLVM IR and generates a Swift interface
-
