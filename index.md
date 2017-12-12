@@ -1,10 +1,12 @@
 ---
-layout: default
+layout: home
 title: The DLVM Compiler Infrastructure for Deep Learning Systems
 exclude: true
 ---
 
-# DLVM: Modern Compiler Infrastructure for Deep Learning Systems
+# DLVM {#home-title}
+
+## Modern Compiler Infrastructure for Deep Learning Systems {#home-subtitle}
 
 ## Introduction
 
@@ -31,13 +33,13 @@ of researchers and developers.
 
 ## Publications
 
-- ["A modern compiler framework for neural network DSLs"](http://learningsys.org/nips17/assets/papers/paper_23.pdf)
+- [**"A modern compiler framework for neural network DSLs"**](http://learningsys.org/nips17/assets/papers/paper_23.pdf)
   - Richard Wei, Lane Schwartz and Vikram Adve
   - [ML Systems Workshop at NIPS 2017](http://learningsys.org/nips17/) - [slides](http://learningsys.org/nips17/assets/slides/dlvm-nips17.pdf)
-- ["A modern compiler infrastructure for deep learning systems with adjoint code generation in a domain-specific IR"](https://openreview.net/forum?id=SJo1PLzCW)
+- [**"A modern compiler infrastructure for deep learning systems with adjoint code generation in a domain-specific IR"**](https://openreview.net/forum?id=SJo1PLzCW)
   - Richard Wei, Lane Schwartz and Vikram Adve
   - [Autodiff Workshop at NIPS 2017](https://autodiff-workshop.github.io/)
-- ["DLVM: A modern compiler infrastructure for deep learning systems"](https://arxiv.org/abs/1711.03016)
+- [**"DLVM: A modern compiler infrastructure for deep learning systems"**](https://arxiv.org/abs/1711.03016)
   - Richard Wei, Lane Schwartz and Vikram Adve
   - Pre-print
 

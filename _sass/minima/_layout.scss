@@ -254,3 +254,22 @@
     }
   }
 }
+
+/**
+ * Homepage styles
+ */
+#home-title {
+  @include relative-font-size(2.625);
+  font-weight: 500;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+#home-subtitle {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+#home-content {
+  padding-top: 10px;
+}
