@@ -47,16 +47,16 @@ of researchers and developers.
 
 All projects are written in [Swift](https://swift.org/about).
 
-- [DLVM Core](https://github.com/dlvm-team/DLVM)
-  - The core compiler infrastructure: IR, analyses, automatic differentiator,
+- [**DLVM Core**](https://github.com/dlvm-team/DLVM)†
+  - The core compiler infrastructure: IR, analyses, automatic differentiation,
     optimization passes, and back-end code generator
-  - *Open-sourcing in progress*
 
-- [NNKit](https://github.com/dlvm-team/NNKit)
+- [**NNKit**](https://github.com/dlvm-team/NNKit)†
   - A "tagless-final" neural network DSL embedded in Swift, representing a form
-    of deep learning toolkits with a focus on safety and developer experience
-  - *Open-sourcing in progress*
+    of deep learning toolkits focusing on safety and developer experience
 
-- The Tensor Expression Language (TEL)
+- **The Tensor Expression Language (TEL)**
   - A standalone DSL for declaratively building neural network computation
     graphs, with a compiler that emits DLVM IR and generates a Swift interface
+
+†: *open sourcing in progress*
