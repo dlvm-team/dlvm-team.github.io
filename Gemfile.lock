@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/dan-zheng/rouge.git
-  revision: cfeb1257fcea0bf18d8f497bba8292897d058a9d
+  revision: 344d490fb3008b6c942acdabd567ee8c12f0d0ad
   branch: dlvm
   specs:
     rouge (2.2.2)
