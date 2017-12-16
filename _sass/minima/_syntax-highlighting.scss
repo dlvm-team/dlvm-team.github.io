@@ -82,7 +82,7 @@ code {
   .il    { color: #099 } // Literal.Number.Integer.Long
 
   .language-dlvm & {
-    .k  { color: #c67c48; font-weight: bold; } // Keyword
+    .k  { color: #c67c48; font-weight: normal } // Keyword
     .kt { color: #00a0be } // Keyword.Type
   }
 }
