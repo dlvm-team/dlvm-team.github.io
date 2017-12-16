@@ -64,7 +64,7 @@ The DLVM Intermediate Representation (IR) is the core language of the DLVM syste
  - uses static single assignment (SSA) form
  - has high-level types, including a first-class tensor type
  - features linear algebra operators, along with a general-purpose instruction set
- - supports many domain-specific transformations (reverse-mode AD, algebra simplification)
+ - supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)
 
 The Swift code above is JIT compiled by NNKit to the following DLVM IR:
 
@@ -85,12 +85,9 @@ func @f: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>) -> <1 x 10 x f32> {
 func @df: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
          -> (<784 x 10 x f32>, <1 x 10 x f32>) {
 'entry(%x: <1 x 784 x f32>, %w: <784 x 10 x f32>, %b: <1 x 10 x f32>, %seed: <1 x 10 x f32>):
-    // Backward pass
-    // df/dw = dot(x^T, seed)
+    // Backward pass: df/dw = dot(x^T, seed), df/db = seed
     %0.0 = transpose %x: <1 x 784 x f32>
     %0.1 = dot %0.0: <784 x 1 x f32>, %seed: <1 x 10 x f32>
-    // df/db = seed (no need for calculation)
-    // Return ( df/dw, df/db )
     %0.2 = literal (%0.1: <784 x 10 x f32>, %seed: <1 x 10 x f32>):
                    (<784 x 10 x f32>, <1 x 10 x f32>)
     return %0.2: (<784 x 10 x f32>, <1 x 10 x f32>)
