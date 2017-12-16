@@ -97,7 +97,7 @@ blockquote {
 pre,
 code {
   font-size: 15px;
-  font-family: Menlo, monospace; }
+  font-family: "SF Mono", Menlo, monospace; }
 
 code {
   padding: 1px 5px; }
