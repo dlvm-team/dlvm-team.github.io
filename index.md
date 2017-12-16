@@ -80,23 +80,20 @@ func @f: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>) -> <1 x 10 x f32> {
 }
 
 // Gradient declaration: [gradient @f wrt 1, 2 seedable]
-// Seedable, able to take back-propagated gradient as a seed for AD
+// Seedable: able to take back-propagated gradient as a seed for AD
 // df(x, w, b, seed) = ( df/dw, df/db )
 func @df: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
          -> (<784 x 10 x f32>, <1 x 10 x f32>) {
 'entry(%x: <1 x 784 x f32>, %w: <784 x 10 x f32>, %b: <1 x 10 x f32>, %seed: <1 x 10 x f32>):
-    // Forward pass: dot(x, w) + b
-    %0.0 = dot %x: <1 x 784 x f32>, %w: <784 x 10 x f32>
-    %0.1 = add %0.0: <1 x 10 x f32>, %b: <1 x 10 x f32>
     // Backward pass
     // df/dw = dot(x^T, seed)
-    %0.2 = transpose %x: <1 x 784 x f32>
-    %0.3 = dot %0.2: <784 x 1 x f32>, %seed: <1 x 10 x f32>
+    %0.0 = transpose %x: <1 x 784 x f32>
+    %0.1 = dot %0.0: <784 x 1 x f32>, %seed: <1 x 10 x f32>
     // df/db = seed (no need for calculation)
     // Return ( df/dw, df/db )
-    %0.4 = literal (%0.3: <784 x 10 x f32>, %seed: <1 x 10 x f32>):
+    %0.2 = literal (%0.1: <784 x 10 x f32>, %seed: <1 x 10 x f32>):
                    (<784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
-    return %0.4: (<784 x 10 x f32>, <1 x 10 x f32>)
+    return %0.2: (<784 x 10 x f32>, <1 x 10 x f32>)
 }
 
 ... // @g and @dg omitted here for brevity
@@ -114,24 +111,21 @@ func @f: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>) -> <_ x _ x f32> {
 }
 
 // Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
-// Seedable, able to take back-propagated gradient as a seed for AD
+// Seedable: able to take back-propagated gradient as a seed for AD
 // df(x, w, b, seed) = ( df/dw, df/db )
 func @df: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>, <_ x _ x f32>)
          -> (<_ x _ x f32>, <1 x _ x f32>) {
 'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <1 x _ x f32>, %seed: <1 x _ x f32>):
-    // Forward pass: dot(x, w) + b
-    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
-    %0.1 = add %0.0: <_ x _ x f32>, %b: <1 x _ x f32>
     // Backward pass
     // df/dw = dot(x^T, seed)
-    %0.2 = transpose %x: <_ x _ x f32>
-    %0.3 = dot %0.2: <_ x _ x f32>, %seed: <_ x _ x f32>
+    %0.0 = transpose %x: <_ x _ x f32>
+    %0.1 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
     // FIXME: df/db = sum(seed, axis=0)
-    %0.4 = reduce %seed: <_ x _ x f32> by add along 0
+    %0.2 = reduce %seed: <_ x _ x f32> by add along 0
     // Return ( df/dw, df/db )
-    %0.5 = literal (%0.3: <_ x _ x f32>, : <1 x _ x f32>)
+    %0.3 = literal (%0.1: <_ x _ x f32>, %0.2: <1 x _ x f32>)
                    (<_ x _ x f32>, <1 x _ x f32>)
-    return %0.5: (<_ x _ x f32>, <1 x _ x f32>)
+    return %0.3: (<_ x _ x f32>, <1 x _ x f32>)
 }
 
 ... // @g and @dg omitted here for brevity
