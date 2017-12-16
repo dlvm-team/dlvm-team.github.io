@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>The DLVM Compiler Infrastructure for Deep Learning Systems</title>
+  <meta name="description" content="Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/">
+  <link rel="alternate" type="application/rss+xml" title="DLVM" href="/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png" ></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a href="/">
+      <img src="/assets/img/dlvm-logo.png" alt="DLVM Logo">
+      <span class="site-title">DLVM</span>
+    </a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/blog/">Blog</a><a class="page-link" href="/people/">People</a></div>
+      </nav></div>
+</header>
+<main class="page-content" id="home-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="home-title">DLVM</h1>
+
+<h2 id="home-subtitle">Modern Compiler Infrastructure for Deep Learning Systems</h2>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Deep learning software demands reliability and performance.
+However, many of the existing deep learning frameworks are software libraries
+that act as an unsafe DSL in Python and a computation graph interpreter.</p>
+
+<p>We present DLVM, a design and implementation of a compiler infrastructure
+with a linear algebra intermediate representation, algorithmic differentiation
+by adjoint code generation, domain-specific optimizations, and a code generator
+targeting GPU via LLVM.</p>
+
+<p>Designed as a modern compiler infrastructure inspired by LLVM, DLVM is more modular
+and more generic than existing deep learning compiler frameworks, and supports
+tensor DSLs with high expressivity. With our prototypical staged DSL embedded in Swift,
+we argue that the DLVM system enables a form of modular, safe, and performant frameworks
+for deep learning.</p>
+
+<hr />
+
+<p>DLVM started as a research project at University of Illinois at
+Urbana-Champaign, and is now driven by a <a href="http://dlvm.org/people">small community</a>
+of researchers and developers.</p>
+
+<h2 id="demos">Demos</h2>
+
+<p>NNKit is a staged DSL embedded in Swift. It:</p>
+<ul>
+  <li>features a natural expression for tensor computations</li>
+  <li>is type-safe, leveraging Swift’s static type system</li>
+  <li>uses lightweight modular staging to perform JIT compilation to DLVM IR</li>
+</ul>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
+<span class="k">let</span> <span class="nv">f</span><span class="p">:</span> <span class="kt">Rep</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float1D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float2D</span><span class="o">&gt;</span> <span class="o">=</span>
+    <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span> <span class="n">x</span> <span class="err">•</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span> <span class="p">}</span>
+
+<span class="c1">// Staged function ’g’, type-inferred from ’f’</span>
+<span class="k">let</span> <span class="nv">g</span> <span class="o">=</span> <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span>
+    <span class="k">let</span> <span class="nv">linear</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="c1">// staged function application</span>
+    <span class="k">return</span> <span class="nf">tanh</span><span class="p">(</span><span class="n">linear</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Gradient of ’g’ with respect to arguments ’w’ and ’b’</span>
+<span class="k">let</span> <span class="nv">dg</span> <span class="o">=</span> <span class="nf">gradient</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="n">g</span><span class="p">,</span> <span class="nv">withRespectTo</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nv">keeping</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1">// ’dg’ has type:</span>
+<span class="c1">// Rep&lt;(Float2D, Float2D, Float1D) -&gt; (Float2D, Float2D, Float2D)&gt;</span>
+
+<span class="c1">// Call staged function on input data ’x’, ’w’ and ’b’</span>
+<span class="k">let</span> <span class="p">(</span><span class="nv">dg_dw</span><span class="p">,</span> <span class="nv">dg_db</span><span class="p">,</span> <span class="nv">result</span><span class="p">)</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+<span class="c1">// At runtime, ’dg’ gets just-in-time compiled though DLVM,</span>
+<span class="c1">// and computes ( dg/dw, dg/db, g(x, w, b) )</span>
+</code></pre></div></div>
+
+<p>The DLVM Intermediate Representation (IR) is the core language of the DLVM system. It:</p>
+<ul>
+  <li>uses static single assignment (SSA) form</li>
+  <li>has high-level types, including a first-class tensor type</li>
+  <li>features linear algebra operators, along with a general-purpose instruction set</li>
+  <li>supports many domain-specific transformations (reverse-mode AD, algebra simplification)</li>
+</ul>
+
+<p>The Swift code above is JIT compiled by NNKit to the following DLVM IR:</p>
+
+<pre><code class="language-dlvm">// Shape specialized for x: &lt;1 x 784&gt;, w: &lt;784 x 10&gt;, b: &lt;1 x 10&gt;
+
+// f(x, w, b) = dot(x, w) + b
+func @f: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;) -&gt; &lt;1 x 10 x f32&gt; {
+'entry(%x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;):
+    %0.0 = dot %x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;$
+    %0.1 = add %0.0: &lt;1 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;
+    return %0.1: &lt;1 x 10 x f32&gt;
+}
+
+// Gradient declaration: [gradient @f wrt 1, 2 seedable]
+// Seedable, able to take back-propagated gradient as a seed for AD
+// df(x, w, b, seed) = ( df/dw, df/db )
+func @df: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+         -&gt; (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;) {
+'entry(%x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;, %seed: &lt;1 x 10 x f32&gt;):
+    // Forward pass: dot(x, w) + b
+    %0.0 = dot %x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;
+    %0.1 = add %0.0: &lt;1 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;
+    // Backward pass
+    // df/dw = dot(x^T, seed)
+    %0.2 = transpose %x: &lt;1 x 784 x f32&gt;
+    %0.3 = dot %0.2: &lt;784 x 1 x f32&gt;, %seed: &lt;1 x 10 x f32&gt;
+    // df/db = seed (no need for calculation)
+    // Return ( df/dw, df/db )
+    %0.4 = literal (%0.3: &lt;784 x 10 x f32&gt;, %seed: &lt;1 x 10 x f32&gt;):
+                   (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+    return %0.4: (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+}
+
+... // @g and @dg omitted here for brevity
+</code></pre>
+
+<!-- Dimension-erased version, in-progress -->
+<!--
+```dlvm
+// f(x, w, b) = dot(x, w) + b
+func @f: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>) -> <_ x _ x f32> {
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <1 x _ x f32>):
+    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
+    %0.1 = add %0.0: <_ x _ x f32>, %b: <1 x _ x f32>
+    return %0.1: <_ x _ x f32>
+}
+
+// Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
+// Seedable, able to take back-propagated gradient as a seed for AD
+// df(x, w, b, seed) = ( df/dw, df/db )
+func @df: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>, <_ x _ x f32>)
+         -> (<_ x _ x f32>, <1 x _ x f32>) {
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <1 x _ x f32>, %seed: <1 x _ x f32>):
+    // Forward pass: dot(x, w) + b
+    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
+    %0.1 = add %0.0: <_ x _ x f32>, %b: <1 x _ x f32>
+    // Backward pass
+    // df/dw = dot(x^T, seed)
+    %0.2 = transpose %x: <_ x _ x f32>
+    %0.3 = dot %0.2: <_ x _ x f32>, %seed: <_ x _ x f32>
+    // FIXME: df/db = sum(seed, axis=0)
+    %0.4 = reduce %seed: <_ x _ x f32> by add along 0
+    // Return ( df/dw, df/db )
+    %0.5 = literal (%0.3: <_ x _ x f32>, : <1 x _ x f32>)
+                   (<_ x _ x f32>, <1 x _ x f32>)
+    return %0.5: (<_ x _ x f32>, <1 x _ x f32>)
+}
+
+... // @g and @dg omitted here for brevity
+```
+-->
+
+<h2 id="publications">Publications</h2>
+
+<ul>
+  <li><a href="http://learningsys.org/nips17/assets/papers/paper_23.pdf"><strong>“A modern compiler framework for neural network DSLs”</strong></a>
+    <ul>
+      <li>Richard Wei, Lane Schwartz and Vikram Adve</li>
+      <li><a href="http://learningsys.org/nips17/">ML Systems Workshop at NIPS 2017</a> - <a href="http://learningsys.org/nips17/assets/slides/dlvm-nips17.pdf">slides</a></li>
+    </ul>
+  </li>
+  <li><a href="https://openreview.net/forum?id=SJo1PLzCW"><strong>“A modern compiler infrastructure for deep learning systems with adjoint code generation in a domain-specific IR”</strong></a>
+    <ul>
+      <li>Richard Wei, Lane Schwartz and Vikram Adve</li>
+      <li><a href="https://autodiff-workshop.github.io/">Autodiff Workshop at NIPS 2017</a></li>
+    </ul>
+  </li>
+  <li><a href="https://arxiv.org/abs/1711.03016"><strong>“DLVM: A modern compiler infrastructure for deep learning systems”</strong></a>
+    <ul>
+      <li>Richard Wei, Lane Schwartz and Vikram Adve</li>
+      <li>Pre-print</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="projects">Projects</h2>
+
+<p>All projects are written in <a href="https://swift.org/about">Swift</a>.</p>
+
+<ul>
+  <li><a href="https://github.com/dlvm-team/DLVM"><strong>DLVM Core</strong></a>†
+    <ul>
+      <li>The core compiler infrastructure: IR, analyses, automatic differentiation,
+optimization passes, and back-end code generator</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/dlvm-team/NNKit"><strong>NNKit</strong></a>†
+    <ul>
+      <li>A “tagless-final” neural network DSL embedded in Swift, representing a form
+of deep learning toolkits focusing on safety and developer experience</li>
+    </ul>
+  </li>
+  <li><strong>The Tensor Expression Language (TEL)</strong>
+    <ul>
+      <li>A standalone DSL for declaratively building neural network computation
+graphs, with a compiler that emits DLVM IR and generates a Swift interface</li>
+    </ul>
+  </li>
+</ul>
+
+<p><sup>†: <em>open sourcing in progress</em></sup></p>
+
+      </div>
+    </main><footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-3">
+        <ul class="contact-list"><li>Contact us:</li>
+          <li><a href="mailto:team@dlvm.org">team@dlvm.org</a></li></ul>
+      </div>
+      <div class="footer-col footer-col-3">
+        <ul class="contact-list"><li>GitHub</li>
+          <li><a href="https://github.com/dlvm-team"><span class="icon icon--github"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">dlvm-team</span></a>
+</li></ul>
+      </div>
+    </div>
+    <h4>Copyright © 2017 DLVM.</h4>
+  </div>
+</footer>
+</body>
+</html>

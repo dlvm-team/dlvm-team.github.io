@@ -3,6 +3,10 @@ setup:
 	gem install bundler
 	bundle install
 
+# Publish site (push to master branch)
+publish:
+	./deploy.sh
+
 # Serve website
 serve:
 	bundle exec jekyll serve --watch --trace
