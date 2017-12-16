@@ -109,23 +109,20 @@ of researchers and developers.</p>
 <span class="p">}</span>
 
 <span class="c1">// Gradient declaration: [gradient @f wrt 1, 2 seedable]</span>
-<span class="c1">// Seedable, able to take back-propagated gradient as a seed for AD</span>
+<span class="c1">// Seedable: able to take back-propagated gradient as a seed for AD</span>
 <span class="c1">// df(x, w, b, seed) = ( df/dw, df/db )</span>
 <span class="kr">func</span> <span class="nf">@df</span><span class="p">:</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
          <span class="o">-&gt;</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span> <span class="p">{</span>
 <span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">):</span>
-    <span class="c1">// Forward pass: dot(x, w) + b</span>
-    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
-    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
     <span class="c1">// Backward pass</span>
     <span class="c1">// df/dw = dot(x^T, seed)</span>
-    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
-    <span class="nv">%0.3 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">1</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">1</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
     <span class="c1">// df/db = seed (no need for calculation)</span>
     <span class="c1">// Return ( df/dw, df/db )</span>
-    <span class="nv">%0.4 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.3</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">):</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.1</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">):</span>
                    <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nv">%0.4</span><span class="p">:</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span>
@@ -143,24 +140,21 @@ func @f: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>) -> <_ x _ x f32> {
 }
 
 // Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
-// Seedable, able to take back-propagated gradient as a seed for AD
+// Seedable: able to take back-propagated gradient as a seed for AD
 // df(x, w, b, seed) = ( df/dw, df/db )
 func @df: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>, <_ x _ x f32>)
          -> (<_ x _ x f32>, <1 x _ x f32>) {
 'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <1 x _ x f32>, %seed: <1 x _ x f32>):
-    // Forward pass: dot(x, w) + b
-    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
-    %0.1 = add %0.0: <_ x _ x f32>, %b: <1 x _ x f32>
     // Backward pass
     // df/dw = dot(x^T, seed)
-    %0.2 = transpose %x: <_ x _ x f32>
-    %0.3 = dot %0.2: <_ x _ x f32>, %seed: <_ x _ x f32>
+    %0.0 = transpose %x: <_ x _ x f32>
+    %0.1 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
     // FIXME: df/db = sum(seed, axis=0)
-    %0.4 = reduce %seed: <_ x _ x f32> by add along 0
+    %0.2 = reduce %seed: <_ x _ x f32> by add along 0
     // Return ( df/dw, df/db )
-    %0.5 = literal (%0.3: <_ x _ x f32>, : <1 x _ x f32>)
+    %0.3 = literal (%0.1: <_ x _ x f32>, %0.2: <1 x _ x f32>)
                    (<_ x _ x f32>, <1 x _ x f32>)
-    return %0.5: (<_ x _ x f32>, <1 x _ x f32>)
+    return %0.3: (<_ x _ x f32>, <1 x _ x f32>)
 }
 
 ... // @g and @dg omitted here for brevity
