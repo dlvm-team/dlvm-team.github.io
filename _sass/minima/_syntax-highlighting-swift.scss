@@ -40,7 +40,7 @@ code {
   .kp    { font-weight: bold } // Keyword.Pseudo
   .kr    { font-weight: bold } // Keyword.Reserved
   .kt    { color: #458; font-weight: bold } // Keyword.Type
-  .m     { color: #1c00cf } // Literal.Number
+  .m     { color: #099 } // Literal.Number
   .s     { color: #d14 } // Literal.String
   .na    { color: teal } // Name.Attribute
   .nb    { color: #0086B3 } // Name.Builtin
@@ -74,4 +74,9 @@ code {
   .vg    { color: teal } // Name.Variable.Global
   .vi    { color: teal } // Name.Variable.Instance
   .il    { color: #099 } // Literal.Number.Integer.Long
+
+  .language-dlvm & {
+    .k  { color: #c67c48; font-weight: normal } // Keyword
+    .kt { color: #458 } // Keyword.Type
+  }
 }
