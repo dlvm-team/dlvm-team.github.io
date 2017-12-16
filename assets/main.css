@@ -380,6 +380,9 @@ code {
 .highlight .c {
   color: #998;
   font-style: italic; }
+.highlight .err {
+  color: #b37070;
+  background-color: #550000; }
 .highlight .k {
   color: #b21889;
   font-weight: bold; }
