@@ -138,6 +138,8 @@ func @df: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>, <_ x _ x f32>)
 ```
 -->
 
+More information about NNKit and DLVM IR will be published soon.
+
 ## Publications
 
 - [**"A modern compiler framework for neural network DSLs"**](http://learningsys.org/nips17/assets/papers/paper_23.pdf)
