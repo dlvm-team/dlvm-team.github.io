@@ -354,7 +354,8 @@ hr {
   text-align: center; }
 
 #home-content {
-  padding-top: 10px; }
+  padding-top: 10px;
+  padding-bottom: 10px; }
 
 /**
  * Code formatting
