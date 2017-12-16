@@ -5,7 +5,8 @@ setup:
 
 # Publish site (push to master branch)
 publish:
-	if jekyll build; then ./deploy.sh; else echo "jekyll build failed."; exit $?; fi
+	jekyll build
+	./deploy.sh
 
 # Serve website
 serve:

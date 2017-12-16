@@ -425,10 +425,11 @@ code {
 .highlight .kc {
   font-weight: bold; }
 .highlight .kd {
-  font-weight: bold; }
+  color: #00a0be; }
 .highlight .kp {
   font-weight: bold; }
 .highlight .kr {
+  color: #b21889;
   font-weight: bold; }
 .highlight .kt {
   color: #00a0be; }
@@ -461,13 +462,13 @@ code {
 .highlight .w {
   color: #bbb; }
 .highlight .mf {
-  color: #099; }
+  color: #786dc4; }
 .highlight .mh {
-  color: #099; }
+  color: #786dc4; }
 .highlight .mi {
-  color: #099; }
+  color: #786dc4; }
 .highlight .mo {
-  color: #099; }
+  color: #786dc4; }
 .highlight .sb {
   color: #d14; }
 .highlight .sc {
@@ -500,3 +501,8 @@ code {
   color: teal; }
 .highlight .il {
   color: #099; }
+.language-dlvm .highlight .k {
+  color: #c67c48;
+  font-weight: bold; }
+.language-dlvm .highlight .kt {
+  color: #00a0be; }

@@ -4,11 +4,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Blog</title>
-  <meta name="description" content="Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.">
+  <title>DLVM Core</title>
+  <meta name="description" content="needs work, consider title change">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/">
+  <link rel="canonical" href="http://localhost:4000/blog/dlvm-core/">
   <link rel="alternate" type="application/rss+xml" title="DLVM" href="/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png" ></head>
 <body><header class="site-header" role="banner">
@@ -31,24 +31,54 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
-  
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">DLVM Core</h1>
+    <p class="post-meta">
+      <time datetime="2017-12-07T16:21:49-05:00" itemprop="datePublished">Dec 7, 2017
+      </time></p>
+  </header>
 
-  <ul class="post-list"><li><span class="post-meta">Dec 7, 2017</span>
-        <h2>
-          <a class="post-link" href="/blog/dlvm-core/">DLVM Core</a>
-        </h2>
-      </li><li><span class="post-meta">Aug 17, 2017</span>
-        <h2>
-          <a class="post-link" href="/blog/nnkit-intro/">NNKit: a staged, type-safe DSL</a>
-        </h2>
-      </li><li><span class="post-meta">Aug 17, 2017</span>
-        <h2>
-          <a class="post-link" href="/blog/welcome/">Welcome</a>
-        </h2>
-      </li></ul>
-  <!-- <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p> -->
-</div>
+  <div class="post-content" itemprop="articleBody">
+    <p><em>needs work, consider title change</em></p>
+
+<h3 id="dlvm-ir">DLVM IR</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module "my_module"
+
+stage raw
+
+// Representing function foo(x, w, b) = dot(x, w) + b
+func @foo: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+          -&gt; &lt;1 x 10 x f32&gt; {
+'entry(%x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;):
+    %v0 = dot %x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;
+    %v1 = add %v0: &lt;1 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;
+    return %v1: &lt;1 x 10 x f32&gt;
+}
+
+// Gradient of @foo with respect to all arguments
+[gradient @foo]
+func @foo_grad: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+               -&gt; (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+
+// Gradient of @foo with respect to arguments 1 and 2
+[gradient @foo wrt 1, 2]
+func @foo_grad_2: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+                 -&gt; (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+
+// Gradient of @foo with respect to arguments 1 and 2
+// Keeping original output 0
+// Seedable, able to take back-propagated gradient as a seed for AD
+[gradient @foo wrt 1, 2 keeping 0 seedable]
+func @foo_grad_3:
+    (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+   -&gt; (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
+</code></pre></div></div>
+
+<h3 id="design-over-performance">Design over Performance</h3>
+
+  </div></article>
 
       </div>
     </main><footer class="site-footer">

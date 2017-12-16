@@ -8,7 +8,7 @@
   <meta name="description" content="Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="dlvm.org/">
+  <link rel="canonical" href="http://localhost:4000/">
   <link rel="alternate" type="application/rss+xml" title="DLVM" href="/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png" ></head>
 <body><header class="site-header" role="banner">
@@ -69,7 +69,7 @@ of researchers and developers.</p>
 
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
 <span class="k">let</span> <span class="nv">f</span><span class="p">:</span> <span class="kt">Rep</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float1D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float2D</span><span class="o">&gt;</span> <span class="o">=</span>
-    <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span> <span class="n">x</span> <span class="err">•</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span> <span class="p">}</span>
+    <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span> <span class="n">x</span> <span class="o">•</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span> <span class="p">}</span>
 
 <span class="c1">// Staged function ’g’, type-inferred from ’f’</span>
 <span class="k">let</span> <span class="nv">g</span> <span class="o">=</span> <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span>
@@ -98,38 +98,38 @@ of researchers and developers.</p>
 
 <p>The Swift code above is JIT compiled by NNKit to the following DLVM IR:</p>
 
-<pre><code class="language-dlvm">// Shape specialized for x: &lt;1 x 784&gt;, w: &lt;784 x 10&gt;, b: &lt;1 x 10&gt;
+<div class="language-dlvm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Shape specialized for x: &lt;1 x 784&gt;, w: &lt;784 x 10&gt;, b: &lt;1 x 10&gt;</span>
 
-// f(x, w, b) = dot(x, w) + b
-func @f: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;) -&gt; &lt;1 x 10 x f32&gt; {
-'entry(%x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;):
-    %0.0 = dot %x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;$
-    %0.1 = add %0.0: &lt;1 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;
-    return %0.1: &lt;1 x 10 x f32&gt;
-}
+<span class="c1">// f(x, w, b) = dot(x, w) + b</span>
+<span class="kr">func</span> <span class="nf">@f</span><span class="p">:</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span> <span class="p">{</span>
+<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">):</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="k">return</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+<span class="p">}</span>
 
-// Gradient declaration: [gradient @f wrt 1, 2 seedable]
-// Seedable, able to take back-propagated gradient as a seed for AD
-// df(x, w, b, seed) = ( df/dw, df/db )
-func @df: (&lt;1 x 784 x f32&gt;, &lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
-         -&gt; (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;) {
-'entry(%x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;, %seed: &lt;1 x 10 x f32&gt;):
-    // Forward pass: dot(x, w) + b
-    %0.0 = dot %x: &lt;1 x 784 x f32&gt;, %w: &lt;784 x 10 x f32&gt;
-    %0.1 = add %0.0: &lt;1 x 10 x f32&gt;, %b: &lt;1 x 10 x f32&gt;
-    // Backward pass
-    // df/dw = dot(x^T, seed)
-    %0.2 = transpose %x: &lt;1 x 784 x f32&gt;
-    %0.3 = dot %0.2: &lt;784 x 1 x f32&gt;, %seed: &lt;1 x 10 x f32&gt;
-    // df/db = seed (no need for calculation)
-    // Return ( df/dw, df/db )
-    %0.4 = literal (%0.3: &lt;784 x 10 x f32&gt;, %seed: &lt;1 x 10 x f32&gt;):
-                   (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
-    return %0.4: (&lt;784 x 10 x f32&gt;, &lt;1 x 10 x f32&gt;)
-}
+<span class="c1">// Gradient declaration: [gradient @f wrt 1, 2 seedable]</span>
+<span class="c1">// Seedable, able to take back-propagated gradient as a seed for AD</span>
+<span class="c1">// df(x, w, b, seed) = ( df/dw, df/db )</span>
+<span class="kr">func</span> <span class="nf">@df</span><span class="p">:</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
+         <span class="p">-&gt;</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span> <span class="p">{</span>
+<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">):</span>
+    <span class="c1">// Forward pass: dot(x, w) + b</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="c1">// Backward pass</span>
+    <span class="c1">// df/dw = dot(x^T, seed)</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">784</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="nv">%0.3 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">1</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span>
+    <span class="c1">// df/db = seed (no need for calculation)</span>
+    <span class="c1">// Return ( df/dw, df/db )</span>
+    <span class="nv">%0.4 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.3</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">):</span>
+                   <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nv">%0.4</span><span class="p">:</span> <span class="p">(</span><span class="kd">&lt;</span><span class="m">784</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">,</span> <span class="kd">&lt;</span><span class="m">1</span> <span class="kd">x</span> <span class="m">10</span> <span class="kd">x</span> <span class="kt">f32</span><span class="kd">&gt;</span><span class="p">)</span>
+<span class="p">}</span>
 
-... // @g and @dg omitted here for brevity
-</code></pre>
+<span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span>
+</code></pre></div></div>
 
 <!-- Dimension-erased version, in-progress -->
 <!--
