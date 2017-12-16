@@ -59,4 +59,4 @@ All projects are written in [Swift](https://swift.org/about).
   - A standalone DSL for declaratively building neural network computation
     graphs, with a compiler that emits DLVM IR and generates a Swift interface
 
-†: *open sourcing in progress*
+<sup>†: *open sourcing in progress*</sup>
