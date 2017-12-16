@@ -20,7 +20,7 @@ code {
   @extend %vertical-rhythm;
 
   .c     { color: #007400; font-style: italic } // Comment
-  .err   { } // Error
+  .err   { color: #a61717; background-color: #e3d2d2 } // Error
   .k     { color: #aa0c91; } // Keyword
   .o     { font-weight: bold } // Operator
   .cm    { color: #007400; } // Comment.Multiline

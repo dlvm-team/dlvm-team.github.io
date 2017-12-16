@@ -138,6 +138,10 @@ pre,
 code {
   @include relative-font-size(0.9375);
   font-family: "SF Mono", Menlo, monospace;
+
+  &.error {
+    color: #ee220c;
+  }
 }
 
 code {

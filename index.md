@@ -100,29 +100,31 @@ func @df: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
 <!--
 ```dlvm
 // f(x, w, b) = dot(x, w) + b
-func @f: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>) -> <_ x _ x f32> {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <1 x _ x f32>):
+func @f: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>) -> <_ x _ x f32> {
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>):
     %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
-    %0.1 = add %0.0: <_ x _ x f32>, %b: <1 x _ x f32>
+    %0.1 = rankLift %b: <_ x f32>
+    %0.2 = add %0.0: <_ x _ x f32>, %0.1: <1 x _ x f32>
     return %0.1: <_ x _ x f32>
 }
 
 // Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
 // Seedable: able to take back-propagated gradient as a seed for AD
 // df(x, w, b, seed) = ( df/dw, df/db )
-func @df: (<_ x _ x f32>, <_ x _ x f32>, <1 x _ x f32>, <_ x _ x f32>)
+func @df: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>, <_ x _ x f32>)
          -> (<_ x _ x f32>, <1 x _ x f32>) {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <1 x _ x f32>, %seed: <1 x _ x f32>):
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <1 x _ x f32>):
     // Backward pass
     // df/dw = dot(x^T, seed)
     %0.0 = transpose %x: <_ x _ x f32>
     %0.1 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
-    // FIXME: df/db = sum(seed, axis=0)
+    // df/db = rankLift(sum(seed, axis=0))
     %0.2 = reduce %seed: <_ x _ x f32> by add along 0
+    %0.3 = rankLift %0.2: <_ x f32>
     // Return ( df/dw, df/db )
-    %0.3 = literal (%0.1: <_ x _ x f32>, %0.2: <1 x _ x f32>)
+    %0.4 = literal (%0.1: <_ x _ x f32>, %0.3: <1 x _ x f32>)
                    (<_ x _ x f32>, <1 x _ x f32>)
-    return %0.3: (<_ x _ x f32>, <1 x _ x f32>)
+    return %0.4: (<_ x _ x f32>, <1 x _ x f32>)
 }
 
 ... // @g and @dg omitted here for brevity
