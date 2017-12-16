@@ -74,7 +74,7 @@ The Swift code above is JIT compiled by NNKit to the following DLVM IR:
 // f(x, w, b) = dot(x, w) + b
 func @f: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>) -> <1 x 10 x f32> {
 'entry(%x: <1 x 784 x f32>, %w: <784 x 10 x f32>, %b: <1 x 10 x f32>):
-    %0.0 = dot %x: <1 x 784 x f32>, %w: <784 x 10 x f32>$
+    %0.0 = dot %x: <1 x 784 x f32>, %w: <784 x 10 x f32>
     %0.1 = add %0.0: <1 x 10 x f32>, %b: <1 x 10 x f32>
     return %0.1: <1 x 10 x f32>
 }
