@@ -137,7 +137,7 @@ blockquote {
 pre,
 code {
   @include relative-font-size(0.9375);
-  font-family: Menlo, monospace;
+  font-family: "SF Mono", Menlo, monospace;
 }
 
 code {
