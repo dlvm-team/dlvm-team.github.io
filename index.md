@@ -92,7 +92,7 @@ func @df: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
     // df/db = seed (no need for calculation)
     // Return ( df/dw, df/db )
     %0.2 = literal (%0.1: <784 x 10 x f32>, %seed: <1 x 10 x f32>):
-                   (<784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
+                   (<784 x 10 x f32>, <1 x 10 x f32>)
     return %0.2: (<784 x 10 x f32>, <1 x 10 x f32>)
 }
 
