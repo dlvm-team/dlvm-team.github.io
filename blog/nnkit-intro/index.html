@@ -4,11 +4,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Blog</title>
-  <meta name="description" content="Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.">
+  <title>NNKit: A Staged, Type-Safe Neural Network DSL</title>
+  <meta name="description" content="work in-progress">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/">
+  <link rel="canonical" href="http://localhost:4000/blog/nnkit-intro/">
   <link rel="alternate" type="application/rss+xml" title="DLVM" href="/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png" ></head>
 <body><header class="site-header" role="banner">
@@ -31,24 +31,33 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
-  
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">NNKit: A Staged, Type-Safe Neural Network DSL</h1>
+    <p class="post-meta">
+      <time datetime="2017-12-15T19:01:49-05:00" itemprop="datePublished">Dec 15, 2017
+      </time></p>
+  </header>
 
-  <ul class="post-list"><li><span class="post-meta">Dec 15, 2017</span>
-        <h2>
-          <a class="post-link" href="/blog/nnkit-intro/">NNKit: A Staged, Type-Safe Neural Network DSL</a>
-        </h2>
-      </li><li><span class="post-meta">Dec 7, 2017</span>
-        <h2>
-          <a class="post-link" href="/blog/dlvm-core/">DLVM Core</a>
-        </h2>
-      </li><li><span class="post-meta">Aug 17, 2017</span>
-        <h2>
-          <a class="post-link" href="/blog/welcome/">Welcome</a>
-        </h2>
-      </li></ul>
-  <!-- <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p> -->
-</div>
+  <div class="post-content" itemprop="articleBody">
+    <p><em>work in-progress</em></p>
+
+<p>Most modern neural network DSLs are embedded in dynamically-typed scripting
+languages, such as Python or Lua.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">]))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">50</span><span class="p">]))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<pre class="error">
+ValueError: Dimensions must be equal, but are
+200 and 100 for 'MatMul' (op: 'MatMul') with
+input shapes: [?,200], [100,50].
+</pre>
+
+  </div></article>
 
       </div>
     </main><footer class="site-footer">

@@ -98,6 +98,9 @@ pre,
 code {
   font-size: 15px;
   font-family: "SF Mono", Menlo, monospace; }
+  pre.error,
+  code.error {
+    color: #ee220c; }
 
 code {
   padding: 1px 5px; }
