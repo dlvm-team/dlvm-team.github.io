@@ -96,69 +96,40 @@ of researchers and developers.</p>
   <li>supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)</li>
 </ul>
 
-<p>The Swift code above is JIT compiled by NNKit to the following DLVM IR:</p>
+<p>The Swift code above is JIT compiled by NNKit to the following dimension-erased DLVM IR:</p>
 
-<div class="language-dlvm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Shape specialized for x: &lt;1 x 784&gt;, w: &lt;784 x 10&gt;, b: &lt;1 x 10&gt;</span>
+<div class="language-dlvm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Note: functions are dimension-erased for flexibility.</span>
+<span class="c1">// Users can choose to shape-specialize functions for better performance.</span>
 
 <span class="c1">// f(x, w, b) = dot(x, w) + b</span>
-<span class="kr">func</span> <span class="nf">@f</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="p">{</span>
-<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
-    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="k">return</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+<span class="kr">func</span> <span class="nf">@f</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="p">{</span>
+<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">rankLift</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="k">return</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
 <span class="p">}</span>
 
-<span class="c1">// Gradient declaration: [gradient @f wrt 1, 2 seedable]</span>
+<span class="c1">// Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]</span>
 <span class="c1">// Seedable: able to take back-propagated gradient as a seed for AD</span>
 <span class="c1">// df(x, w, b, seed) = ( df/dw, df/db )</span>
-<span class="kr">func</span> <span class="nf">@df</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
-         <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="p">{</span>
-<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
-    <span class="c1">// Backward pass: df/dw = dot(x^T, seed), df/db = seed</span>
-    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">1</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
-                   <span class="p">(</span><span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+<span class="kr">func</span> <span class="nf">@df</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+         <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="p">{</span>
+<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
+    <span class="c1">// Backward pass</span>
+    <span class="c1">// df/dw = dot(x^T, seed)</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="c1">// df/db = sum(seed, axis=0)</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">reduce</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="kr">by</span> <span class="k">add</span> <span class="kr">along</span> <span class="m">0</span>
+    <span class="c1">// Return ( df/dw, df/db )</span>
+    <span class="nv">%0.3 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
+                   <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nv">%0.3</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span>
 </code></pre></div></div>
-
-<!-- Dimension-erased version, in-progress -->
-<!--
-```dlvm
-// f(x, w, b) = dot(x, w) + b
-func @f: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>) -> <_ x _ x f32> {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>):
-    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
-    %0.1 = rankLift %b: <_ x f32>
-    %0.2 = add %0.0: <_ x _ x f32>, %0.1: <1 x _ x f32>
-    return %0.1: <_ x _ x f32>
-}
-
-// Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
-// Seedable: able to take back-propagated gradient as a seed for AD
-// df(x, w, b, seed) = ( df/dw, df/db )
-func @df: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>, <_ x _ x f32>)
-         -> (<_ x _ x f32>, <1 x _ x f32>) {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <1 x _ x f32>):
-    // Backward pass
-    // df/dw = dot(x^T, seed)
-    %0.0 = transpose %x: <_ x _ x f32>
-    %0.1 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
-    // df/db = rankLift(sum(seed, axis=0))
-    %0.2 = reduce %seed: <_ x _ x f32> by add along 0
-    %0.3 = rankLift %0.2: <_ x f32>
-    // Return ( df/dw, df/db )
-    %0.4 = literal (%0.1: <_ x _ x f32>, %0.3: <1 x _ x f32>)
-                   (<_ x _ x f32>, <1 x _ x f32>)
-    return %0.4: (<_ x _ x f32>, <1 x _ x f32>)
-}
-
-... // @g and @dg omitted here for brevity
-```
--->
 
 <p>More information about NNKit and DLVM IR will be published soon.</p>
 
