@@ -66,70 +66,41 @@ The DLVM Intermediate Representation (IR) is the core language of the DLVM syste
  - features linear algebra operators, along with a general-purpose instruction set
  - supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)
 
-The Swift code above is JIT compiled by NNKit to the following DLVM IR:
+The Swift code above is JIT compiled by NNKit to the following dimension-erased DLVM IR:
 
 ```dlvm
-// Shape specialized for x: <1 x 784>, w: <784 x 10>, b: <1 x 10>
+// Note: functions are dimension-erased for flexibility.
+// Users can choose to shape-specialize functions for better performance.
 
-// f(x, w, b) = dot(x, w) + b
-func @f: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>) -> <1 x 10 x f32> {
-'entry(%x: <1 x 784 x f32>, %w: <784 x 10 x f32>, %b: <1 x 10 x f32>):
-    %0.0 = dot %x: <1 x 784 x f32>, %w: <784 x 10 x f32>
-    %0.1 = add %0.0: <1 x 10 x f32>, %b: <1 x 10 x f32>
-    return %0.1: <1 x 10 x f32>
-}
-
-// Gradient declaration: [gradient @f wrt 1, 2 seedable]
-// Seedable: able to take back-propagated gradient as a seed for AD
-// df(x, w, b, seed) = ( df/dw, df/db )
-func @df: (<1 x 784 x f32>, <784 x 10 x f32>, <1 x 10 x f32>, <1 x 10 x f32>)
-         -> (<784 x 10 x f32>, <1 x 10 x f32>) {
-'entry(%x: <1 x 784 x f32>, %w: <784 x 10 x f32>, %b: <1 x 10 x f32>, %seed: <1 x 10 x f32>):
-    // Backward pass: df/dw = dot(x^T, seed), df/db = seed
-    %0.0 = transpose %x: <1 x 784 x f32>
-    %0.1 = dot %0.0: <784 x 1 x f32>, %seed: <1 x 10 x f32>
-    %0.2 = literal (%0.1: <784 x 10 x f32>, %seed: <1 x 10 x f32>):
-                   (<784 x 10 x f32>, <1 x 10 x f32>)
-    return %0.2: (<784 x 10 x f32>, <1 x 10 x f32>)
-}
-
-... // @g and @dg omitted here for brevity
-```
-
-<!-- Dimension-erased version, in-progress -->
-<!--
-```dlvm
 // f(x, w, b) = dot(x, w) + b
 func @f: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>) -> <_ x _ x f32> {
 'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>):
     %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
     %0.1 = rankLift %b: <_ x f32>
     %0.2 = add %0.0: <_ x _ x f32>, %0.1: <1 x _ x f32>
-    return %0.1: <_ x _ x f32>
+    return %0.2: <_ x _ x f32>
 }
 
 // Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
 // Seedable: able to take back-propagated gradient as a seed for AD
 // df(x, w, b, seed) = ( df/dw, df/db )
 func @df: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>, <_ x _ x f32>)
-         -> (<_ x _ x f32>, <1 x _ x f32>) {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <1 x _ x f32>):
+         -> (<_ x _ x f32>, <_ x _ x f32>) {
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <_ x _ x f32>):
     // Backward pass
     // df/dw = dot(x^T, seed)
     %0.0 = transpose %x: <_ x _ x f32>
     %0.1 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
-    // df/db = rankLift(sum(seed, axis=0))
+    // df/db = sum(seed, axis=0)
     %0.2 = reduce %seed: <_ x _ x f32> by add along 0
-    %0.3 = rankLift %0.2: <_ x f32>
     // Return ( df/dw, df/db )
-    %0.4 = literal (%0.1: <_ x _ x f32>, %0.3: <1 x _ x f32>)
-                   (<_ x _ x f32>, <1 x _ x f32>)
-    return %0.4: (<_ x _ x f32>, <1 x _ x f32>)
+    %0.3 = literal (%0.1: <_ x _ x f32>, %0.2: <_ x f32>):
+                   (<_ x _ x f32>, <_ x f32>)
+    return %0.3: (<_ x _ x f32>, <_ x f32>)
 }
 
 ... // @g and @dg omitted here for brevity
 ```
--->
 
 More information about NNKit and DLVM IR will be published soon.
 
