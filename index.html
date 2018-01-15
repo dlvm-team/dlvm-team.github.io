@@ -7,10 +7,13 @@
   <title>The DLVM Compiler Infrastructure for Deep Learning Systems</title>
   <meta name="description" content="Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.">
 
-  <link rel="stylesheet" href="/assets/main.css">
   <link rel="canonical" href="dlvm.org/">
   <link rel="alternate" type="application/rss+xml" title="DLVM" href="/feed.xml">
-  <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png" ></head>
+  <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/js/bootstrap.js"></script></head>
 <body><header class="site-header" role="banner">
   <div class="wrapper"><a href="/">
       <img src="/assets/img/dlvm-logo.png" alt="DLVM Logo">
@@ -66,13 +69,12 @@ of researchers and developers.</p>
   <li>is type-safe, leveraging Swift’s static type system</li>
   <li>uses lightweight modular staging to perform JIT compilation to DLVM IR</li>
 </ul>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
 <span class="k">let</span> <span class="nv">f</span><span class="p">:</span> <span class="kt">Rep</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float1D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float2D</span><span class="o">&gt;</span> <span class="o">=</span>
-    <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span> <span class="n">x</span> <span class="o">•</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span> <span class="p">}</span>
+    <span class="n">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span> <span class="n">x</span> <span class="o">•</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="nf">rankLifted</span><span class="p">()</span> <span class="p">}</span>
 
 <span class="c1">// Staged function ’g’, type-inferred from ’f’</span>
-<span class="k">let</span> <span class="nv">g</span> <span class="o">=</span> <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span>
+<span class="k">let</span> <span class="nv">g</span> <span class="o">=</span> <span class="n">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span>
     <span class="k">let</span> <span class="nv">linear</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="c1">// staged function application</span>
     <span class="k">return</span> <span class="nf">tanh</span><span class="p">(</span><span class="n">linear</span><span class="p">)</span>
 <span class="p">}</span>
@@ -85,9 +87,7 @@ of researchers and developers.</p>
 <span class="c1">// Call staged function on input data ’x’, ’w’ and ’b’</span>
 <span class="k">let</span> <span class="p">(</span><span class="nv">dg_dw</span><span class="p">,</span> <span class="nv">dg_db</span><span class="p">,</span> <span class="nv">result</span><span class="p">)</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
 <span class="c1">// At runtime, ’dg’ gets just-in-time compiled though DLVM,</span>
-<span class="c1">// and computes ( dg/dw, dg/db, g(x, w, b) )</span>
-</code></pre></div></div>
-
+<span class="c1">// and computes ( dg/dw, dg/db, g(x, w, b) )</span></code></pre></figure>
 <p>The DLVM Intermediate Representation (IR) is the core language of the DLVM system. It:</p>
 <ul>
   <li>uses static single assignment (SSA) form</li>
@@ -96,16 +96,56 @@ of researchers and developers.</p>
   <li>supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)</li>
 </ul>
 
-<p>The Swift code above is JIT compiled by NNKit to the following dimension-erased DLVM IR:</p>
+<p>The Swift code above is JIT compiled by NNKit to the following DLVM IR:</p>
 
-<div class="language-dlvm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Note: functions are dimension-erased for flexibility.</span>
-<span class="c1">// Users can choose to shape-specialize functions for better performance.</span>
+<ul class="nav nav-tabs" id="dlvm-ir-demo" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">Shape-specialized version</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">Dimension-erased version</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="shape-specialized" role="tabpanel" aria-labelledby="shape-specialized-tab">
+<figure class="highlight"><pre><code class="language-dlvm" data-lang="dlvm"><span class="c1">// In shape-specialized functions, input shapes are statically known.</span>
+<span class="c1">// This enables more optimizations and results in better performance.</span>
+<span class="c1">// Shape-specialized for x: &lt;1 x 784&gt;, w: &lt;784 x 10&gt;, b: &lt;10&gt;</span>
 
-<span class="c1">// f(x, w, b) = dot(x, w) + b</span>
+<span class="c1">// f(x, w, b) = dot(x, w) + pad(b, at: 0)</span>
+<span class="kr">func</span> <span class="nf">@f</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="p">{</span>
+<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">padShape</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="kr">at</span> <span class="m">0</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="k">return</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+<span class="p">}</span>
+
+<span class="c1">// Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]</span>
+<span class="c1">// Seedable: able to take backpropagated gradient as a seed for AD</span>
+<span class="c1">// df(x, w, b, seed) = ( df/dw, df/db )</span>
+<span class="kr">func</span> <span class="nf">@df</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+         <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="p">{</span>
+<span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
+    <span class="c1">// Backward pass: df/dw = dot(x^T, seed), df/db = squeeze(seed, at: 0)</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">squeezeShape</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="kr">at</span> <span class="m">0</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">784</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">1</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.3 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span> <span class="p">(</span><span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nv">%0.3</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;784</span> <span class="kt">x</span> <span class="kt">10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;10</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span></code></pre></figure>
+</div>
+  <div class="tab-pane fade" id="dim-erased" role="tabpanel" aria-labelledby="dim-erased-tab">
+<figure class="highlight"><pre><code class="language-dlvm" data-lang="dlvm"><span class="c1">// Dimension-erased functions are flexible because input shapes are dynamic.</span>
+<span class="c1">// They may be slower and less optimized than their shape-specialized counterparts.</span>
+
+<span class="c1">// f(x, w, b) = dot(x, w) + pad(b, at: 0)</span>
 <span class="kr">func</span> <span class="nf">@f</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="p">{</span>
 <span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
     <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">rankLift</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">padShape</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="kr">at</span> <span class="m">0</span>
     <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">add</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;1</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
     <span class="k">return</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
 <span class="p">}</span>
@@ -116,20 +156,17 @@ of researchers and developers.</p>
 <span class="kr">func</span> <span class="nf">@df</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
          <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span> <span class="p">{</span>
 <span class="nl">'entry</span><span class="p">(</span><span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%w</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%b</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
-    <span class="c1">// Backward pass</span>
-    <span class="c1">// df/dw = dot(x^T, seed)</span>
-    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
-    <span class="c1">// df/db = sum(seed, axis=0)</span>
-    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">reduce</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="kr">by</span> <span class="k">add</span> <span class="kr">along</span> <span class="m">0</span>
-    <span class="c1">// Return ( df/dw, df/db )</span>
-    <span class="nv">%0.3 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span>
-                   <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
+    <span class="c1">// Backward pass: df/dw = dot(x^T, seed), df/db = squeeze(seed, at: 0)</span>
+    <span class="nv">%0.0 </span><span class="p">=</span> <span class="k">squeezeShape</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span> <span class="kr">at</span> <span class="m">0</span>
+    <span class="nv">%0.1 </span><span class="p">=</span> <span class="k">transpose</span> <span class="nv">%x</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.2 </span><span class="p">=</span> <span class="k">dot</span> <span class="nv">%0.1</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%seed</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span>
+    <span class="nv">%0.3 </span><span class="p">=</span> <span class="k">literal</span> <span class="p">(</span><span class="nv">%0.2</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="nv">%0.0</span><span class="p">:</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">):</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
     <span class="k">return</span> <span class="nv">%0.3</span><span class="p">:</span> <span class="p">(</span><span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">,</span> <span class="kt">&lt;_</span> <span class="kt">x</span> <span class="kt">f32&gt;</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span>
-</code></pre></div></div>
+<span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span></code></pre></figure>
+</div>
+</div>
 
 <p>More information about NNKit and DLVM IR will be published soon.</p>
 
