@@ -69,7 +69,7 @@ of researchers and developers.</p>
   <li>is type-safe, leveraging Swift’s static type system</li>
   <li>uses lightweight modular staging to perform JIT compilation to DLVM IR</li>
 </ul>
-<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
+<figure class="language-swift" data-lang="swift"><pre class="highlight"><code class="highlight"><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
 <span class="k">let</span> <span class="nv">f</span><span class="p">:</span> <span class="kt">Rep</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float1D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float2D</span><span class="o">&gt;</span> <span class="o">=</span>
     <span class="nf">lambda</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="k">in</span> <span class="n">x</span> <span class="o">•</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="nf">rankLifted</span><span class="p">()</span> <span class="p">}</span>
 
@@ -100,15 +100,19 @@ of researchers and developers.</p>
 
 <ul class="nav nav-tabs" id="dlvm-ir-demo" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">Shape-specialized version</a>
+    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">
+      Shape-specialized version
+    </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">Dimension-erased version</a>
+    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">
+      Dimension-erased version
+    </a>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
+<div class="tab-content" id="dlvm-ir-demo-content">
   <div class="tab-pane fade show active" id="shape-specialized" role="tabpanel" aria-labelledby="shape-specialized-tab">
-<figure class="highlight"><pre><code class="language-dlvm" data-lang="dlvm"><span class="c1">// In shape-specialized functions, input shapes are statically known.</span>
+<figure class="language-dlvm" data-lang="dlvm"><pre class="highlight"><code class="highlight"><span class="c1">// In shape-specialized functions, input shapes are statically known.</span>
 <span class="c1">// This enables more optimizations and results in better performance.</span>
 <span class="c1">// Shape-specialized for x: &lt;1 x 784&gt;, w: &lt;784 x 10&gt;, b: &lt;10&gt;</span>
 
@@ -138,7 +142,7 @@ of researchers and developers.</p>
 <span class="p">...</span> <span class="c1">// @g and @dg omitted here for brevity</span></code></pre></figure>
 </div>
   <div class="tab-pane fade" id="dim-erased" role="tabpanel" aria-labelledby="dim-erased-tab">
-<figure class="highlight"><pre><code class="language-dlvm" data-lang="dlvm"><span class="c1">// Dimension-erased functions are flexible because input shapes are dynamic.</span>
+<figure class="language-dlvm" data-lang="dlvm"><pre class="highlight"><code class="highlight"><span class="c1">// Dimension-erased functions are flexible because input shapes are dynamic.</span>
 <span class="c1">// They may be slower and less optimized than their shape-specialized counterparts.</span>
 
 <span class="c1">// f(x, w, b) = dot(x, w) + pad(b, at: 0)</span>
