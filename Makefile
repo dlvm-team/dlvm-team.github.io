@@ -5,7 +5,7 @@ setup:
 
 # Publish site (push to master branch)
 publish:
-	jekyll build
+	bundle exec jekyll build
 	./deploy.sh
 
 # Serve website
