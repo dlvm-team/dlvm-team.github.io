@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/dan-zheng/rouge.git
-  revision: 5e2ee43d99ff20c24a0369a89b2a3aadf98f363d
+  revision: c9301e7c55b6b8c232a2a2ced0f3d946ffc03a54
   branch: dlvm
   specs:
     rouge (2.2.2)
@@ -49,7 +49,7 @@ GEM
       ffi (>= 0.5.0, < 2)
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
-    sass (3.5.4)
+    sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -67,4 +67,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.15.3
+   1.16.1
