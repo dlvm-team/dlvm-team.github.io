@@ -385,7 +385,7 @@ pre,
 code {
   border: 1px solid #d6d6d6;
   border-radius: 3px;
-  background-color: #141619;
+  background-color: #1e2028;
   color: #fff;
   font-size: 14px; }
 
@@ -393,7 +393,7 @@ code {
  * Syntax highlighting styles
  */
 .highlight .c {
-  color: #998;
+  color: #aa9;
   font-style: italic; }
 .highlight .err {
   color: #b37070;
@@ -404,16 +404,16 @@ code {
 .highlight .o {
   font-weight: bold; }
 .highlight .cm {
-  color: #998;
+  color: #aa9;
   font-style: italic; }
 .highlight .cp {
-  color: #999;
+  color: #aaa;
   font-weight: bold; }
 .highlight .c1 {
-  color: #998;
+  color: #aa9;
   font-style: italic; }
 .highlight .cs {
-  color: #999;
+  color: #aaa;
   font-weight: bold;
   font-style: italic; }
 .highlight .gd {
@@ -427,7 +427,7 @@ code {
 .highlight .gr {
   color: #a00; }
 .highlight .gh {
-  color: #999; }
+  color: #aaa; }
 .highlight .gi {
   color: #000;
   background-color: #dfd; }
@@ -515,7 +515,7 @@ code {
 .highlight .ss {
   color: #990073; }
 .highlight .bp {
-  color: #999; }
+  color: #aaa; }
 .highlight .vc {
   color: teal; }
 .highlight .vg {
