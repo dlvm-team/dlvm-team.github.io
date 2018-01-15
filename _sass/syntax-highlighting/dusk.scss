@@ -8,10 +8,6 @@ code {
   background-color: #141619;
   color: #fff;
   font-size: 14px;
-
-  &.language-dlvm {
-    font-size: 13px;
-  }
 }
 
 /**
@@ -80,8 +76,11 @@ code {
   .vg    { color: teal } // Name.Variable.Global
   .vi    { color: teal } // Name.Variable.Instance
   .il    { color: #099 } // Literal.Number.Integer.Long
+}
 
-  .language-dlvm & {
+code {
+  &.language-dlvm, .language-dlvm & {
+    font-size: 13px;
     .k  { color: #c67c48; font-weight: normal } // Keyword
     .kt { color: #00a0be } // Keyword.Type
   }
