@@ -5,7 +5,7 @@ pre,
 code {
   border: 1px solid #d6d6d6;
   border-radius: 3px;
-  background-color: #141619;
+  background-color: #1e2028;
   color: #fff;
   font-size: 14px;
 }
@@ -16,19 +16,19 @@ code {
 .highlight {
   @extend %vertical-rhythm;
 
-  .c     { color: #998; font-style: italic } // Comment
+  .c     { color: #aa9; font-style: italic } // Comment
   .err   { color: #b37070; background-color: #550000 } // Error
   .k     { color: #b21889; font-weight: bold; } // Keyword
   .o     { font-weight: bold } // Operator
-  .cm    { color: #998; font-style: italic } // Comment.Multiline
-  .cp    { color: #999; font-weight: bold } // Comment.Preproc
-  .c1    { color: #998; font-style: italic } // Comment.Single
-  .cs    { color: #999; font-weight: bold; font-style: italic } // Comment.Special
+  .cm    { color: #aa9; font-style: italic } // Comment.Multiline
+  .cp    { color: #aaa; font-weight: bold } // Comment.Preproc
+  .c1    { color: #aa9; font-style: italic } // Comment.Single
+  .cs    { color: #aaa; font-weight: bold; font-style: italic } // Comment.Special
   .gd    { color: #000; background-color: #fdd } // Generic.Deleted
   .gd .x { color: #000; background-color: #faa } // Generic.Deleted.Specific
   .ge    { font-style: italic } // Generic.Emph
   .gr    { color: #a00 } // Generic.Error
-  .gh    { color: #999 } // Generic.Heading
+  .gh    { color: #aaa } // Generic.Heading
   .gi    { color: #000; background-color: #dfd } // Generic.Inserted
   .gi .x { color: #000; background-color: #afa } // Generic.Inserted.Specific
   .go    { color: #888 } // Generic.Output
@@ -71,7 +71,7 @@ code {
   .sr    { color: #009926 } // Literal.String.Regex
   .s1    { color: #d14 } // Literal.String.Single
   .ss    { color: #990073 } // Literal.String.Symbol
-  .bp    { color: #999 } // Name.Builtin.Pseudo
+  .bp    { color: #aaa } // Name.Builtin.Pseudo
   .vc    { color: teal } // Name.Variable.Class
   .vg    { color: teal } // Name.Variable.Global
   .vi    { color: teal } // Name.Variable.Instance

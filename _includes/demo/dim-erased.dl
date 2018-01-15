@@ -16,8 +16,8 @@ func @f: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>) -> <_ x _ x f32> {
 func @df: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>, <_ x _ x f32>)
          -> (<_ x _ x f32>, <_ x _ x f32>) {
 'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <_ x _ x f32>):
-    // Backward pass: df/dw = dot(x^T, seed), df/db = squeeze(seed, at: 0)
-    %0.0 = squeezeShape %seed: <_ x _ x f32> at 0
+    // Backward pass: df/dw = dot(x^T, seed), df/db = sum(seed, along: 0)
+    %0.0 = reduce %seed: <_ x _ x f32> by add init 0: f32 along 0
     %0.1 = transpose %x: <_ x _ x f32>
     %0.2 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
     %0.3 = literal (%0.2: <_ x _ x f32>, %0.0: <_ x f32>): (<_ x _ x f32>, <_ x f32>)
