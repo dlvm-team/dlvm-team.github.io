@@ -58,7 +58,7 @@ The Swift code above is JIT compiled by NNKit to the following DLVM IR:
     <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">Dimension-erased version</a>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
+<div class="tab-content" id="dlvm-ir-demo-content">
   <div class="tab-pane fade show active" id="shape-specialized" role="tabpanel" aria-labelledby="shape-specialized-tab">
     {%- highlight dlvm -%}
     {%- include demo/shape-specialized.dl -%}
