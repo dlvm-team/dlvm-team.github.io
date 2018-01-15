@@ -52,10 +52,14 @@ The Swift code above is JIT compiled by NNKit to the following DLVM IR:
 
 <ul class="nav nav-tabs" id="dlvm-ir-demo" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">Shape-specialized version</a>
+    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">
+      Shape-specialized version
+    </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">Dimension-erased version</a>
+    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">
+      Dimension-erased version
+    </a>
   </li>
 </ul>
 <div class="tab-content" id="dlvm-ir-demo-content">

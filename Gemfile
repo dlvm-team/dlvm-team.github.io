@@ -5,9 +5,9 @@ source "https://rubygems.org"
 
 # Custom gems
 gem "rouge", :git => 'https://github.com/dan-zheng/rouge.git', :branch => "dlvm"
+gem "jekyll", :git => 'https://github.com/dan-zheng/jekyll.git'
 
 # Default dependencies
-gem "jekyll", "3.6.2"
 gem "minima", "2.1.1"
 
 group :jekyll_plugins do

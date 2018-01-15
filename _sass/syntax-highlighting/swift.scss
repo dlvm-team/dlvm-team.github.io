@@ -3,10 +3,18 @@
  */
 pre,
 code {
-  border: 1px solid #d6d6d6;
-  border-radius: 3px;
-  background-color: #f9fafa;
   font-size: 14px;
+}
+
+pre {
+  .language-swift & {
+    border-left: 5px #ef5138 solid;
+  }
+  .language-dlvm & {
+    border-left: 5px #387cef solid;
+  }
+  margin: 0.5em;
+  margin-left: 10px;
 }
 
 /**
@@ -79,7 +87,7 @@ code {
 code {
   &.language-dlvm, .language-dlvm & {
     font-size: 13px;
-    .k  { color: #c67c48; font-weight: normal } // Keyword
+    .k  { color: #d23726; font-weight: bold } // Keyword
     .kt { color: #458 } // Keyword.Type
   }
 }
