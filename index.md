@@ -52,25 +52,25 @@ The Swift code above is JIT compiled by NNKit to the following DLVM IR:
 
 <ul class="nav nav-tabs" id="dlvm-ir-demo" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">
-      Shape-specialized version
+    <a class="nav-link active" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">
+      Dimension-erased version
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">
-      Dimension-erased version
+    <a class="nav-link" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">
+      Shape-specialized version
     </a>
   </li>
 </ul>
 <div class="tab-content" id="dlvm-ir-demo-content">
-  <div class="tab-pane fade show active" id="shape-specialized" role="tabpanel" aria-labelledby="shape-specialized-tab">
-    {%- highlight dlvm -%}
-    {%- include demo/shape-specialized.dl -%}
-    {%- endhighlight -%}
-  </div>
-  <div class="tab-pane fade" id="dim-erased" role="tabpanel" aria-labelledby="dim-erased-tab">
+  <div class="tab-pane fade show active" id="dim-erased" role="tabpanel" aria-labelledby="dim-erased-tab">
     {%- highlight dlvm -%}
     {%- include demo/dim-erased.dl -%}
+    {%- endhighlight -%}
+  </div>
+  <div class="tab-pane fade" id="shape-specialized" role="tabpanel" aria-labelledby="shape-specialized-tab">
+    {%- highlight dlvm -%}
+    {%- include demo/shape-specialized.dl -%}
     {%- endhighlight -%}
   </div>
 </div>
