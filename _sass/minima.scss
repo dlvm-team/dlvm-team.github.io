@@ -47,7 +47,8 @@ $on-laptop:        900px !default;
 @import
   "minima/base",
   "minima/layout",
-  "minima/syntax-highlighting-dusk"
-  // "minima/syntax-highlighting-swift"
-  // "minima/syntax-highlighting-xcode"
+  "tabs",
+  "syntax-highlighting/dusk"
+  // "syntax-highlighting/swift"
+  // "syntax-highlighting/xcode"
 ;

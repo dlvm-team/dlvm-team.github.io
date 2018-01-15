@@ -1,0 +1,27 @@
+// Dimension-erased functions are flexible because input shapes are dynamic.
+// They may be slower and less optimized than their shape-specialized counterparts.
+
+// f(x, w, b) = dot(x, w) + pad(b, at: 0)
+func @f: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>) -> <_ x _ x f32> {
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>):
+    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
+    %0.1 = padShape %b: <_ x f32> at 0
+    %0.2 = add %0.0: <_ x _ x f32>, %0.1: <1 x _ x f32>
+    return %0.2: <_ x _ x f32>
+}
+
+// Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
+// Seedable: able to take back-propagated gradient as a seed for AD
+// df(x, w, b, seed) = ( df/dw, df/db )
+func @df: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>, <_ x _ x f32>)
+         -> (<_ x _ x f32>, <_ x _ x f32>) {
+'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <_ x _ x f32>):
+    // Backward pass: df/dw = dot(x^T, seed), df/db = squeeze(seed, at: 0)
+    %0.0 = squeezeShape %seed: <_ x _ x f32> at 0
+    %0.1 = transpose %x: <_ x _ x f32>
+    %0.2 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
+    %0.3 = literal (%0.2: <_ x _ x f32>, %0.0: <_ x f32>): (<_ x _ x f32>, <_ x f32>)
+    return %0.3: (<_ x _ x f32>, <_ x f32>)
+}
+
+... // @g and @dg omitted here for brevity

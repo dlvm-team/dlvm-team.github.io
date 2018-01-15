@@ -38,27 +38,9 @@ NNKit is a staged DSL embedded in Swift. It:
  - is type-safe, leveraging Swift's static type system
  - uses lightweight modular staging to perform JIT compilation to DLVM IR
 
-```swift
-// Staged function representing f(x, w, b) = dot(x, w) + b
-let f: Rep<(Float2D, Float2D, Float1D) -> Float2D> =
-    lambda { x, w, b in x • w + b }
-
-// Staged function ’g’, type-inferred from ’f’
-let g = lambda { x, w, b in
-    let linear = f[x, w, b] // staged function application
-    return tanh(linear)
-}
-
-// Gradient of ’g’ with respect to arguments ’w’ and ’b’
-let dg = gradient(of: g, withRespectTo: (1, 2), keeping: 0)
-// ’dg’ has type:
-// Rep<(Float2D, Float2D, Float1D) -> (Float2D, Float2D, Float2D)>
-
-// Call staged function on input data ’x’, ’w’ and ’b’
-let (dg_dw, dg_db, result) = dg[x, w, b]
-// At runtime, ’dg’ gets just-in-time compiled though DLVM,
-// and computes ( dg/dw, dg/db, g(x, w, b) )
-```
+{%- highlight swift -%}
+{%- include demo/nnkit.swift -%}
+{%- endhighlight -%}
 
 The DLVM Intermediate Representation (IR) is the core language of the DLVM system. It:
  - uses static single assignment (SSA) form
@@ -66,41 +48,28 @@ The DLVM Intermediate Representation (IR) is the core language of the DLVM syste
  - features linear algebra operators, along with a general-purpose instruction set
  - supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)
 
-The Swift code above is JIT compiled by NNKit to the following dimension-erased DLVM IR:
+The Swift code above is JIT compiled by NNKit to the following DLVM IR:
 
-```dlvm
-// Note: functions are dimension-erased for flexibility.
-// Users can choose to shape-specialize functions for better performance.
-
-// f(x, w, b) = dot(x, w) + b
-func @f: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>) -> <_ x _ x f32> {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>):
-    %0.0 = dot %x: <_ x _ x f32>, %w: <_ x _ x f32>
-    %0.1 = rankLift %b: <_ x f32>
-    %0.2 = add %0.0: <_ x _ x f32>, %0.1: <1 x _ x f32>
-    return %0.2: <_ x _ x f32>
-}
-
-// Gradient declaration in DLVM IR: [gradient @f wrt 1, 2 seedable]
-// Seedable: able to take back-propagated gradient as a seed for AD
-// df(x, w, b, seed) = ( df/dw, df/db )
-func @df: (<_ x _ x f32>, <_ x _ x f32>, <_ x f32>, <_ x _ x f32>)
-         -> (<_ x _ x f32>, <_ x _ x f32>) {
-'entry(%x: <_ x _ x f32>, %w: <_ x _ x f32>, %b: <_ x f32>, %seed: <_ x _ x f32>):
-    // Backward pass
-    // df/dw = dot(x^T, seed)
-    %0.0 = transpose %x: <_ x _ x f32>
-    %0.1 = dot %0.1: <_ x _ x f32>, %seed: <_ x _ x f32>
-    // df/db = sum(seed, axis=0)
-    %0.2 = reduce %seed: <_ x _ x f32> by add along 0
-    // Return ( df/dw, df/db )
-    %0.3 = literal (%0.1: <_ x _ x f32>, %0.2: <_ x f32>):
-                   (<_ x _ x f32>, <_ x f32>)
-    return %0.3: (<_ x _ x f32>, <_ x f32>)
-}
-
-... // @g and @dg omitted here for brevity
-```
+<ul class="nav nav-tabs" id="dlvm-ir-demo" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="shape-specialized-tab" data-toggle="tab" href="#shape-specialized" role="tab" aria-controls="shape-specialized" aria-selected="false">Shape-specialized version</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="dim-erased-tab" data-toggle="tab" href="#dim-erased" role="tab" aria-controls="dim-erased" aria-selected="true">Dimension-erased version</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="shape-specialized" role="tabpanel" aria-labelledby="shape-specialized-tab">
+    {%- highlight dlvm -%}
+    {%- include demo/shape-specialized.dl -%}
+    {%- endhighlight -%}
+  </div>
+  <div class="tab-pane fade" id="dim-erased" role="tabpanel" aria-labelledby="dim-erased-tab">
+    {%- highlight dlvm -%}
+    {%- include demo/dim-erased.dl -%}
+    {%- endhighlight -%}
+  </div>
+</div>
 
 More information about NNKit and DLVM IR will be published soon.
 
