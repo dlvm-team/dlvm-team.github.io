@@ -93,7 +93,7 @@ More information about NNKit and DLVM IR will be published soon.
 
 All projects are written in [Swift](https://swift.org/about).
 
-- [**DLVM Core**](https://github.com/dlvm-team/DLVM)†
+- [**DLVM Core**](https://github.com/dlvm-team/dlvm-core)†
   - The core compiler infrastructure: IR, analyses, automatic differentiation,
     optimization passes, and back-end code generator
 
