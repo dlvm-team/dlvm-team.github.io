@@ -31,6 +31,13 @@ DLVM started as a research project at University of Illinois at
 Urbana-Champaign, and is now driven by a [small community](http://dlvm.org/people)
 of researchers and developers.
 
+---
+
+**Update**: The authors of this project are no longer maintaining DLVM, but instead developing
+[Swift for TensorFlow](https://www.tensorflow.org/community/swift), a project
+providing first-class language and compiler support for machine learning in Swift.
+Watch the [TensorFlow Dev Summit 2018 video](https://www.youtube.com/watch?v=Yze693W4MaU) for more information.
+
 ## Demos
 
 NNKit is a staged DSL embedded in Swift. It:
