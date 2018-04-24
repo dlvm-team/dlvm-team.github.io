@@ -27,9 +27,7 @@ for deep learning.
 
 ---
 
-DLVM started as a research project at University of Illinois at
-Urbana-Champaign, and is now driven by a [small community](http://dlvm.org/people)
-of researchers and developers.
+DLVM started as a research project at University of Illinois at Urbana-Champaign.
 
 ---
 
