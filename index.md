@@ -36,6 +36,9 @@ DLVM started as a research project at University of Illinois at Urbana-Champaign
 providing first-class language and compiler support for machine learning in Swift.
 Watch the [TensorFlow Dev Summit 2018 video](https://www.youtube.com/watch?v=Yze693W4MaU) for more information.
 
+Swift for TensorFlow is now open-source! Visit the [documentation repository](https://github.com/tensorflow/swift)
+for more details.
+
 ## Demos
 
 NNKit is a staged DSL embedded in Swift. It:
