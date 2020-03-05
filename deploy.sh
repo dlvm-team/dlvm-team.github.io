@@ -78,7 +78,8 @@ parse_args() {
 	default_email=${GIT_DEPLOY_EMAIL:-}
 
 	#repository to deploy to. must be readable and writable.
-	repo=${GIT_DEPLOY_REPO:-https://github.com/dlvm-team/dlvm-team.github.io}
+	# repo=${GIT_DEPLOY_REPO:-https://github.com/dlvm-team/dlvm-team.github.io}
+	repo=${GIT_DEPLOY_REPO:-git@github.com:dlvm-team/dlvm-team.github.io.git}
 
 	#append commit hash to the end of message by default
 	append_hash=${GIT_DEPLOY_APPEND_HASH:-true}
