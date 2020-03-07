@@ -1,2 +1,2 @@
 # DLVM Website
-http://dlvm.org
+http://dlvm-team.github.io

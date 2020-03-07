@@ -1,6 +1,6 @@
 ## Contributing to the DLVM Website
 
-The DLVM website ([dlvm.org](http://dlvm.org)) is maintained by the DLVM team.
+The DLVM website ([dlvm-team.github.io](http://dlvm-team.github.io)) is maintained by the DLVM team.
 
 ## Local Development
 
