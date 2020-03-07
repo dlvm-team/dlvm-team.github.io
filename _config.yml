@@ -1,6 +1,6 @@
 # Site settings
 title: DLVM
-email: team@dlvm.org
+email: dlvmteam@gmail.com
 description: >
   Site for DLVM (Deep Learning Virtual Machine), a compiler infrastructure for modern deep learning software.
 baseurl: ''
