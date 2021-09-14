@@ -73,9 +73,9 @@ for more details.</p>
 
 <p>NNKit is a staged DSL embedded in Swift. It:</p>
 <ul>
-  <li>features a natural expression for tensor computations</li>
-  <li>is type-safe, leveraging Swift’s static type system</li>
-  <li>uses lightweight modular staging to perform JIT compilation to DLVM IR</li>
+  <li>Features a natural expression for tensor computations</li>
+  <li>Is type-safe, leveraging Swift’s static type system</li>
+  <li>Uses lightweight modular staging to perform JIT compilation to DLVM IR</li>
 </ul>
 <figure class="language-swift" data-lang="swift"><pre class="highlight"><code class="highlight"><span class="c1">// Staged function representing f(x, w, b) = dot(x, w) + b</span>
 <span class="k">let</span> <span class="nv">f</span><span class="p">:</span> <span class="kt">Rep</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float2D</span><span class="p">,</span> <span class="kt">Float1D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float2D</span><span class="o">&gt;</span> <span class="o">=</span>
@@ -98,10 +98,10 @@ for more details.</p>
 <span class="c1">// and computes ( dg/dw, dg/db, g(x, w, b) )</span></code></pre></figure>
 <p>The DLVM Intermediate Representation (IR) is the core language of the DLVM system. It:</p>
 <ul>
-  <li>uses static single assignment (SSA) form</li>
-  <li>has high-level types, including a first-class tensor type</li>
-  <li>features linear algebra operators, along with a general-purpose instruction set</li>
-  <li>supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)</li>
+  <li>Uses static single assignment (SSA) form</li>
+  <li>Has high-level types, including a first-class tensor type</li>
+  <li>Features linear algebra operators, along with a general-purpose instruction set</li>
+  <li>Supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)</li>
 </ul>
 
 <p>The Swift code above is JIT compiled by NNKit to the following DLVM IR:</p>
