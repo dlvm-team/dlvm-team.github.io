@@ -42,19 +42,19 @@ for more details.
 ## Demos
 
 NNKit is a staged DSL embedded in Swift. It:
- - features a natural expression for tensor computations
- - is type-safe, leveraging Swift's static type system
- - uses lightweight modular staging to perform JIT compilation to DLVM IR
+ - Features a natural expression for tensor computations
+ - Is type-safe, leveraging Swift's static type system
+ - Uses lightweight modular staging to perform JIT compilation to DLVM IR
 
 {%- highlight swift -%}
 {%- include demo/nnkit.swift -%}
 {%- endhighlight -%}
 
 The DLVM Intermediate Representation (IR) is the core language of the DLVM system. It:
- - uses static single assignment (SSA) form
- - has high-level types, including a first-class tensor type
- - features linear algebra operators, along with a general-purpose instruction set
- - supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)
+ - Uses static single assignment (SSA) form
+ - Has high-level types, including a first-class tensor type
+ - Features linear algebra operators, along with a general-purpose instruction set
+ - Supports many domain-specific transformations (e.g. reverse-mode AD, algebra simplification)
 
 The Swift code above is JIT compiled by NNKit to the following DLVM IR:
 
